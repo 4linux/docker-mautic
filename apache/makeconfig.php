@@ -45,6 +45,32 @@ if(array_key_exists('PHP_INI_DATE_TIMEZONE', $_ENV)) {
     $parameters['default_timezone'] = $_ENV['PHP_INI_DATE_TIMEZONE'];
 }
 
+if(array_key_exists('CACHE_ADAPTER', $_ENV)) {
+    $parameters['cache_adapter'] = $_ENV['CACHE_ADAPTER'];
+}
+
+if(array_key_exists('CACHE_PREFIX', $_ENV)) {
+    $parameters['cache_prefix'] = $_ENV['CACHE_PREFIX'];
+}
+
+if(array_key_exists('CACHE_LIFETIME', $_ENV)) {
+    $parameters['cache_lifetime'] = $_ENV['CACHE_LIFETIME'];
+}
+
+if(array_key_exists('REDIS_DSN', $_ENV)) {
+    $parameters['redis']['dsn'] = $_ENV['REDIS_DSN'];
+    foreach($_ENV as  $config=>$value){
+            if(!strstr($config,'REDIS_OPTIONS')){
+                  continue;
+            }
+            $config=str_replace('REDIS_OPTIONS_','',$config);
+            $config=strtolower($config);
+            $parameters['redis']['options'][$config] = $value;
+    }
+
+}
+
+
 $path     = '/var/www/html/app/config/local.php';
 $rendered = "<?php\n\$parameters = ".var_export($parameters, true).";\n";
 

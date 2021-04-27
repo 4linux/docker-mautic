@@ -60,7 +60,7 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/lib --with-png-dir=/usr
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 # Define Mautic volume to persist data
-VOLUME /var/www/html
+VOLUME /var/www/html/media
 
 # Define Mautic version and expected SHA1 signature
 ENV MAUTIC_VERSION 3.3.2
@@ -85,9 +85,9 @@ ENV PHP_INI_DATE_TIMEZONE='UTC' \
 RUN curl -o mautic.zip -SL https://github.com/mautic/mautic/releases/download/${MAUTIC_VERSION}/${MAUTIC_VERSION}.zip \
     && echo "$MAUTIC_SHA1 *mautic.zip" | sha1sum -c - \
     && mkdir /usr/src/mautic \
-    && unzip mautic.zip -d /usr/src/mautic \
+    && unzip mautic.zip -d /var/www/html \
     && rm mautic.zip \
-    && chown -R www-data:www-data /usr/src/mautic
+    && chown -R www-data:www-data /var/www/html 
 
 # Copy init scripts and custom .htaccess
 COPY docker-entrypoint.sh /entrypoint.sh

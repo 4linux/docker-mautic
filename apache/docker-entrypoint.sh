@@ -93,10 +93,15 @@ if ! [ -e index.php -a -e app/AppKernel.php ]; then
                 ( set -x; ls -A; sleep 10 )
         fi
 
-        tar cf - --one-file-system -C /usr/src/mautic . | tar xf -
+        #tar cf - --one-file-system -C /usr/src/mautic . | tar xf -
+	#ln -s /usr/src/mautic/* /var/www/html
+	chown www-data.www-data /var/www/html/media
 
         echo >&2 "Complete! Mautic has been successfully copied to $(pwd)"
 fi
+	
+
+chown www-data.www-data /var/www/html/media
 
 # Ensure the MySQL Database is created
 php /makedb.php "$MAUTIC_DB_HOST" "$MAUTIC_DB_USER" "$MAUTIC_DB_PASSWORD" "$MAUTIC_DB_NAME"
